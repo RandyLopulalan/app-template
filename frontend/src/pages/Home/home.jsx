@@ -1,10 +1,29 @@
+// import { useState } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./index.scss";
 
 
 const Home = ({ data }) => {
+  // const [deleteId, setDeleteId] = useState('')
+  // headers: { "content-type": "multipart/form-data" },
+  
+      // body: formData,
+      // data: listData,
   const detailPage = useNavigate();
   const editPage = useNavigate();
+
+  const deleteData = async (id) => {
+    // const formData = new FormData();
+    const API_URL = `http://localhost:5000/api/product/${id}`;
+    const options = {
+      url: API_URL,
+      method: "DELETE"
+    };
+  
+    const response = await axios(options);
+    return response.data;
+  }
 
   return (
     <div className="main">
@@ -45,9 +64,9 @@ const Home = ({ data }) => {
                   >
                     Edit
                   </button>
-                  <Link to="#" className="btn btn-sm btn-danger">
+                  <button onClick={() => deleteData(_id)} className="btn btn-sm btn-danger">
                     Delete
-                  </Link>
+                  </button>
                 </td>
               </tr>
             );
