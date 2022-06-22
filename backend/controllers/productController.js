@@ -34,7 +34,7 @@ const setProduct = asyncHandler(async (req, res) => {
     throw new Error("Please add a text field");
   }
 
-  //Check if users exists
+  //Check if product exists
   const productExists = await Product.findOne({ name });
   if (productExists) {
     res.status(400);

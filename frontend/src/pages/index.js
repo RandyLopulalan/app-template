@@ -1,4 +1,4 @@
-import Detail from "./Detail/detai";
+import Detail from "./Detail/detail";
 import Edit from "./Edit/edit";
 import ErrorPage from "./ErrorPage/error-page";
 import Home from "./Home/home";

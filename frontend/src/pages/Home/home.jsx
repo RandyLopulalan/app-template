@@ -1,28 +1,32 @@
-// import { useState } from "react";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { getProduct, reset } from "../../features/product/productSlice";
+import ProductList from "./product-list";
+import Spinner from "../../component/Spinner";
 import "./index.scss";
 
+const Home = () => {
+  const dispatch = useDispatch();
+  const { product, isLoading, isError, message } = useSelector(
+    (state) => state.product
+  );
 
-const Home = ({ data }) => {
-  // const [deleteId, setDeleteId] = useState('')
-  // headers: { "content-type": "multipart/form-data" },
-  
-      // body: formData,
-      // data: listData,
-  const detailPage = useNavigate();
-  const editPage = useNavigate();
+  useEffect(() => {
+    if (isError) {
+      console.error(message);
+    }
 
-  const deleteData = async (id) => {
-    // const formData = new FormData();
-    const API_URL = `http://localhost:5000/api/product/${id}`;
-    const options = {
-      url: API_URL,
-      method: "DELETE"
+    dispatch(getProduct());
+
+    //Clear state when compomnent unmound
+    return () => {
+      dispatch(reset());
     };
-  
-    const response = await axios(options);
-    return response.data;
+  }, [isError, message, dispatch]);
+
+  if (isLoading) {
+    <Spinner />;
   }
 
   return (
@@ -35,89 +39,25 @@ const Home = ({ data }) => {
         <input type="text" placeholder="Masukan kata kunci..." />
       </div>
 
-      <table className="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th className="text-right">Price</th>
-            <th className="text-center">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map(({ _id, name, price }) => {
-            return (
-              <tr key={_id}>
-                <td>{_id.length > 7 ? _id.substring(0, 7) : _id}</td>
-                <td>{name}</td>
-                <td className="text-right">{price}</td>
-                <td className="text-center">
-                  <button
-                    onClick={() => detailPage(`/detail/${_id}`)}
-                    className="btn btn-sm btn-info"
-                  >
-                    Detail
-                  </button>
-                  <button
-                    onClick={() => editPage(`/edit/${_id}`)}
-                    className="btn btn-sm btn-warning"
-                  >
-                    Edit
-                  </button>
-                  <button onClick={() => deleteData(_id)} className="btn btn-sm btn-danger">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-
-      {/* <table className="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th className="text-right">Price</th>
-            <th className="text-center">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Laptop</td>
-            <td className="text-right">RP. 20.000.000</td>
-            <td className="text-center">
-              <Link to="/detail" className="btn btn-sm btn-info">
-                Detail
-              </Link>
-              <Link to="/edit" className="btn btn-sm btn-warning">
-                Edit
-              </Link>
-              <Link to="#" className="btn btn-sm btn-danger">
-                Delete
-              </Link>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Monitor</td>
-            <td className="text-right">RP. 10.000.000</td>
-            <td className="text-center">
-              <Link to="/detail" className="btn btn-sm btn-info">
-                Detail
-              </Link>
-              <Link to="/edit" className="btn btn-sm btn-warning">
-                Edit
-              </Link>
-              <Link to="#" className="btn btn-sm btn-danger">
-                Delete
-              </Link>
-            </td>
-          </tr>
-        </tbody>
-      </table> */}
+      {product.length > 0 ? (
+        <table className="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th className="text-right">Price</th>
+              <th className="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {product.map((products) => (
+              <ProductList key={products._id} products={products} />
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <h3>Product: 0, click tambah to add product</h3>
+      )}
     </div>
   );
 };
