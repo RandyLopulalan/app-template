@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProductForm = ({
+const TambahForm = ({
   label,
   className,
   name,
@@ -45,4 +45,4 @@ const ProductForm = ({
   return result;
 };
 
-export default ProductForm;
+export default TambahForm;

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getProduct, reset } from "../../features/product/productSlice";
+import { getProduct } from "../../features/product/productSlice";
 import ProductList from "./product-list";
 import Spinner from "../../component/Spinner";
 import "./index.scss";
@@ -18,11 +18,6 @@ const Home = () => {
     }
 
     dispatch(getProduct());
-
-    //Clear state when compomnent unmound
-    return () => {
-      dispatch(reset());
-    };
   }, [isError, message, dispatch]);
 
   if (isLoading) {

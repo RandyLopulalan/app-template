@@ -48,6 +48,24 @@ export const createProduct = createAsyncThunk(
   }
 );
 
+// Update product
+export const updateProduct = createAsyncThunk(
+  "product/update",
+  async (dataProduct, thunkAPI) => {
+    try {
+      return await productService.updateProduct(dataProduct);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Delete product
 export const deleteProduct = createAsyncThunk(
   "product/delete",
@@ -95,9 +113,22 @@ export const productSlice = createSlice({
       .addCase(createProduct.fulfilled, (state, actions) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.product = state.product.push(actions.payload)
+        state.product.push(actions.payload)
       })
       .addCase(createProduct.rejected, (state, actions) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = actions.payload;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, actions) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.product = state.product.map((products) => products._id === actions.payload.id ? {...actions.payload} : products)
+      })
+      .addCase(updateProduct.rejected, (state, actions) => {
         state.isLoading = false;
         state.isError = true;
         state.message = actions.payload;

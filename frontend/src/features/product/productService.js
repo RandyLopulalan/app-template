@@ -16,6 +16,24 @@ const createProduct = async (dataProduct) => {
   return response.data
 }
 
+// Update product
+const updateProduct = async (dataProduct) => {
+  const {_id} = dataProduct
+  const {name, price, stock, status, image} = dataProduct
+  const options = {
+    url: API_URL + _id,
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: {name, price, stock, status, image}
+  };
+  const response = await axios(options)
+
+  return response.data
+}
+
 // Delete Product
 const deleteProduct = async (productId) => {
   const response = await axios.delete(API_URL + productId)
@@ -26,6 +44,7 @@ const deleteProduct = async (productId) => {
 const productService = {
   getProduct,
   createProduct,
+  updateProduct,
   deleteProduct,
 };
 

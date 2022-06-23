@@ -11,7 +11,7 @@ const ProductList = ({ products }) => {
 
   return (
     <tr>
-      <td>{products._id.substring(0, 7)}</td>
+      <td>{products._id.substring(0, 10)}</td>
       <td>{products.name}</td>
       <td className="text-right">{products.price}</td>
       <td className="text-center">

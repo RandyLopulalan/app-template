@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { createProduct, getProduct } from "../../features/product/productSlice";
 import Spinner from "../../component/Spinner";
-import ProductForm from "./product-form";
+import TambahForm from "./tambah-form";
 import "./index.scss";
 
 
@@ -32,7 +32,13 @@ const Tambah = () => {
     
     const dataProduct = { name, price, stock, status, image };
     dispatch(createProduct(dataProduct))
-    setCreateData('')
+    setCreateData({
+      name: "",
+      price: 0,
+      stock: 0,
+      status: true,
+      image: "",
+    })
 
     if(isError){
       console.error(message)
@@ -54,11 +60,11 @@ const Tambah = () => {
         <h2>Tambah Produk</h2>
         <br />
         <form onSubmit={onSubmit} >
-          <ProductForm label="Nama" className="form-control" name="name" id="name" type="text" value={name} onChange={onChange}/>
-          <ProductForm label="Harga" className="form-control" name="price"id="price" type="number" value={price} onChange={onChange}/>
-          <ProductForm label="Stock" className="form-control" name="stock" id="stock" type="number" value={stock} onChange={onChange}/>
-          <ProductForm label="Image" className="form-control" name="image" id="image" type="file" value={image} onChange={onChange}/>
-          <ProductForm label="Active" className="is-invalid" name="status" id="status" type="checkbox" defaultChecked={status} onChange={onChange}/>
+          <TambahForm label="Nama" className="form-control" name="name" id="name" type="text" value={name} onChange={onChange}/>
+          <TambahForm label="Harga" className="form-control" name="price"id="price" type="number" value={price} onChange={onChange}/>
+          <TambahForm label="Stock" className="form-control" name="stock" id="stock" type="number" value={stock} onChange={onChange}/>
+          <TambahForm label="Image" className="form-control" name="image" id="image" type="file" value={image} onChange={onChange}/>
+          <TambahForm label="Active" className="is-invalid" name="status" id="status" type="checkbox" defaultChecked={status} onChange={onChange}/>
           <br />
           <button type="submit" className="btn btn-primary">
             Simpan
